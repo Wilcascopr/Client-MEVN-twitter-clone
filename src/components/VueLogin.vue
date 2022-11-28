@@ -1,0 +1,47 @@
+<template>
+   <div class="Sign">
+       <img src="../assets/logo.png" alt="">
+       <h2>Sign in to Twitter</h2>
+       <form @submit.prevent="handleLogin">
+           <div class="field">
+               <label>Email</label>
+               <input type="email" v-model="email">
+           </div>
+           <div class="field">
+               <label>Password</label>
+               <input type="password" v-model="password">
+           </div>
+           <button>Log in</button>
+       </form>
+       <div>Don't have an accoount? <span @click="emitToggle">Sign Up</span></div>
+   </div> 
+</template>
+
+<script>
+import useLogin from '@/composables/useLogin'
+import { ref } from 'vue';
+
+export default {
+  name: 'VueLogin',
+  setup(props, context) {
+    const email = ref('');
+    const password = ref('');
+
+    const { error, login } = useLogin();
+
+      const emitToggle = () => {
+         context.emit('Toggle')
+      }
+
+      const handleLogin = async () => {
+        const response = await login({ email: email.value, password: password.value })
+
+        if (!error.value) console.log(response);
+        context.emit('Login')
+
+      }
+
+      return { emitToggle, login, email, password, handleLogin }
+  }
+}
+</script>
