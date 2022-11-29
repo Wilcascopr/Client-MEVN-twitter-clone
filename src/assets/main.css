@@ -1,0 +1,33 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+button {
+    cursor: pointer;
+    display: block;
+    background: rgb(29,155,240);
+    border: none;
+    color: white;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+input {
+    border: none;
+    width: 100%;
+    display: block;
+}
+
+input:focus-visible {
+    outline: none;
+}
+
+span {
+    cursor: pointer;
+    font-weight: bold;    
+}
+
+* {
+    box-sizing: border-box;
+}

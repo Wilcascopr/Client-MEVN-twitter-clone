@@ -3,12 +3,12 @@ import axios from "../api/axios";
 
 const error = ref(null)
 
-const refresh = async () => {
+const getUser = async (id) => {
     error.value = null;
 
     try {
 
-        const res = await axios.get('/users/refresh', { withCredentials: true });
+        const res = await axios.get('/users/userdata/' + id);
         
         return res.data
 
@@ -19,8 +19,8 @@ const refresh = async () => {
 
 }
 
-const useRefresh = () => {
-    return {error, refresh}
+const usegetUser = () => {
+    return {error, getUser}
 }
 
-export default useRefresh
+export default usegetUser

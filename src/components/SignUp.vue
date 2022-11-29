@@ -1,6 +1,6 @@
 <template>
     <div class="Sign">
-        <img src="../assets/logo.png" alt="">
+        <img src="../assets/logo.png">
         <h2>Join Twitter today</h2>
         <form @submit.prevent="handleSignup">
             <div class="field">
@@ -74,12 +74,7 @@ export default {
                 border-radius: 3px;
                 padding: 5px;
                 input {
-                    border: none;
                     height: 20px;
-                    width: 100%;
-                }
-                input:focus-visible {
-                    outline: none;
                 }
             }
             .field:focus-within {
@@ -87,17 +82,11 @@ export default {
                 color: rgb(29,155,240);
             }
             button {
-                cursor: pointer;
-                display: block;
                 width: 100%;
-                background: rgb(29,155,240);
                 border: none;
-                color: white;
                 height: 3em;
-                border-radius: 20px;
                 margin-top: 50px;
                 font-size: 14px;
-                font-weight: bold;
             }
         }
         div {
