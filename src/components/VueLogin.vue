@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import useLogin from '@/composables/useLogin'
+import { useLogin } from '@/composables/useUserMethods'
 import { ref } from 'vue';
 
 export default {
@@ -30,14 +30,14 @@ export default {
     const { error, login } = useLogin();
 
       const emitToggle = () => {
-         context.emit('Toggle')
+         context.emit('toggle')
       }
 
       const handleLogin = async () => {
         const response = await login({ email: email.value, password: password.value })
 
         if (!error.value) console.log(response);
-        context.emit('Login')
+        context.emit('login')
 
       }
 

@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import useSignup from '@/composables/useSignup';
+import { useSignup } from '@/composables/useUserMethods';
 import { ref } from 'vue';
 
 export default {
@@ -34,7 +34,7 @@ export default {
         const { error, signup} = useSignup();
 
         const emitToggle = () => {
-            context.emit('Toggle');
+            context.emit('toggle');
         }
 
         const handleSignup = async () => {
@@ -51,7 +51,7 @@ export default {
 
 <style lang="scss">
     .Sign {
-        width: 25%;
+        width: 30%;
         padding: 20px 50px;
         border-radius: 7px;
         box-shadow: -1px 1px 4px gray;

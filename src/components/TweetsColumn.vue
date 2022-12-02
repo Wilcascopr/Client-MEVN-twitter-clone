@@ -10,15 +10,21 @@
             :accessToken="user.accessToken"
             @addTweet="addTweet"/>
         </div>
-        <div v-for="tweet in tweets" :key="tweet.id">
-            <SingleTweet :tweet="tweet" />
+        <div v-if="tweets.length">
+            <transition-group tag="ul" name="list">
+                <li v-for="tweet in tweets" 
+                :key="tweet._id"
+                class="tweetscontainer">
+                    <SingleTweet :tweet="tweet" :user="user"/>
+                </li>
+            </transition-group>
         </div>
     </div>
 </template>
 
 <script>
 import { onBeforeMount, onUnmounted, ref } from 'vue';
-import usegetTweets from '@/composables/usegetTweets';
+import { usegetTweets } from '@/composables/useTweetMethods';
 import createTweet from './createTweet.vue';
 import SingleTweet from './SingleTweet.vue';
 
@@ -44,9 +50,12 @@ export default {
             console.log(document.documentElement.scrollHeight - document.documentElement.scrollTop)
         }
 
-        getTweets(page.toString())
-            .then(data => tweets.value = data)
-            .catch(error => console.log(error))
+        setTimeout(() => {
+            getTweets(page)
+                .then(data => tweets.value = data)
+                .catch(error => console.log(error))
+        }, 1000);
+        
 
         const addTweet = (tweet) => {
             tweets.value.unshift(tweet)
@@ -59,6 +68,17 @@ export default {
 </script>
 
 <style scoped lang="scss">
+    .list-enter-from,
+    .list-leave-to {
+        opacity: 0;
+        transform: scale(0.1);
+    }
+
+    .list-enter-active,
+    .list-leave-active {
+        transition: all 0.4s ease;
+    }
+
     .tweets-column {
         width: 100%;
         nav {
@@ -82,8 +102,13 @@ export default {
                 margin-left: 20px;
             }
         }
-        > div {
+        .tweetscontainer {
             padding: 1px 0;
         }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
     }
+    
 </style>

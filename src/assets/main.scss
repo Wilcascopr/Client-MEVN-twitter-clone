@@ -13,15 +13,18 @@ button {
     font-weight: bold;
 }
 
-input {
+textarea, input {
     border: none;
     width: 100%;
     display: block;
+    resize: none;
+    overflow: hidden;
 }
 
-input:focus-visible {
+textarea:focus-visible, input:focus-visible {
     outline: none;
 }
+
 
 span {
     cursor: pointer;

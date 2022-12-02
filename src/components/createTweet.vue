@@ -1,7 +1,9 @@
 <template>
     <div>
         <form @submit.prevent="handlenNewTweet">
-            <input type="text" v-model="text" placeholder="What's happening?">
+            <textarea v-model="text" 
+            placeholder="What's happening?"
+            @keyup="Adjust"></textarea>
             <button>Tweet</button>
         </form>
     </div>
@@ -9,7 +11,7 @@
   
 <script>
 import { ref } from 'vue';
-import useCrateTweet from '@/composables/useCreateTweet';
+import { useCrateTweet } from '@/composables/useTweetMethods';
 
   export default {
     props: ['accessToken'],
@@ -19,14 +21,19 @@ import useCrateTweet from '@/composables/useCreateTweet';
         const tags = ref ([]);
 
         const handlenNewTweet = async() => {
-            const tweet = await createTweet({ text: text.value, tags: tags.value }, props.accessToken)
+            const tweet = await createTweet({text: text.value, tags: tags.value }, props.accessToken)
             if (!error.value) {
                 text.value = ''
                 context.emit('addTweet', tweet)
             }
         }
 
-        return { text, handlenNewTweet, tags }
+        const Adjust = (e) => {
+            e.target.style.height = '1px';
+            e.target.style.height = `${e.target.scrollHeight}px`
+        }
+
+        return { text, handlenNewTweet, tags, Adjust }
     }
   }
 </script>
@@ -34,7 +41,9 @@ import useCrateTweet from '@/composables/useCreateTweet';
 <style scoped lang="scss">
     form {
        margin: 0 40px;
-       input {
+       textarea {
+            height: max-content;
+            width: 100%;
             border-bottom: 1px solid lightgray;
             padding: 20px;
             margin: 10px 0;

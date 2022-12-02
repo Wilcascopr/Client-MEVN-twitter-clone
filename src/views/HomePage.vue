@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import useRefresh from '@/composables/useRefresh';
+import { useRefresh } from '@/composables/useUserMethods';
 import TweetsColumn from '@/components/TweetsColumn.vue';
 import userCloud from '@/components/userCloud.vue';
 import TrendingTags from '@/components/TrendingTags.vue';

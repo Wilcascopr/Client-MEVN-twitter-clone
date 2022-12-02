@@ -1,11 +1,11 @@
 <template>
   <div class="home">
     <SignUp v-if="signup" 
-    @Toggle="signup = !signup"
+    @toggle="signup = !signup"
      />
     <VueLogin v-else 
-    @Toggle="signup = !signup"
-    @Login="router.push({ name: 'homepage' })"/>
+    @toggle="signup = !signup"
+    @login="router.push({ name: 'homepage' })"/>
   </div>
 </template>
 
