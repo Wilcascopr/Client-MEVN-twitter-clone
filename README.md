@@ -1,4 +1,4 @@
-# client
+# Twitter clone client side
 
 ## Project setup
 ```
