@@ -1,42 +1,64 @@
 <template>
-  <div class="tweet">
-    <div v-if="tweetUser">
-    <span>{{tweetUser.name}} <span class="small">{{tweetUser.email}}</span> . <span class="small">{{computedDate}}</span></span>     
+  <div class="tweet" @click.self="$router.push({ name: 'tweet', params: { id: tweet._id } })">
+    <div v-if="tweetUser" @click.stop class="user" 
+    :class="{ relative: !backDrop }" >
+      <router-link :to=" { name: 'profile', params: { id: tweetUser.userID }} ">
+          <span> {{tweetUser.name}} <span class="small">{{tweetUser.email}}</span> . <span class="small">{{computedDate}}</span>  </span>   
+      </router-link>
+      <div>
+        <span class="material-symbols-outlined" :class="tweet._id"
+        v-if="((tweetUser.userID === user.userID) && !options)"
+        @click="(options = !options)">more_horiz</span>
+      </div>
+      <div v-if="options" class="optionsT">
+            <div id="delete"
+            @click="async () => {
+              await deleteTweet(tweet._id, user.accessToken)
+              if (!errorEight) $emit('delete')
+            }"><span class="material-symbols-outlined">delete</span> Delete </div>
+      </div>
     </div>
-    <p>{{tweet.text}}</p>
-    <div class="icons">
-      <div>
-        <div class="like" @click="handleLike">
-          <img src="../assets/favorite.svg" 
-          :class=" { liked: tweet.likes.includes(user.userID)} ">
+    <p @click="$router.push({ name: 'tweet', params: { id: tweet._id } })">{{tweet.text}}</p>
+    <div class="icons" >
+        <div class="like">
+            <span class="material-symbols-outlined" 
+            :class=" { liked: tweet.likes.includes(user.userID)} "
+            @click="handleLike">
+              favorite
+            </span>        
+            <span style="font-weight: normal; font-size: 1em; margin-left:10px"
+            v-if="tweet.likes.length"> 
+              {{tweet.likes.length}} 
+            </span>
         </div>
-        <span class="small"
-        :class=" { liked: tweet.likes.includes(user.userID)} "
-        v-if="tweet.likes.length"> 
-        {{tweet.likes.length}} </span>
-      </div>
-      <div>
-        <div class="comment">
-          <img src="../assets/comment.svg">
+        <div class="comments">
+            <span class="material-symbols-outlined" @click="$emit('responseE'); responseINS = !responseINS">chat</span>
+            <span  style="font-weight: normal; font-size: 1em; margin-left:10px" v-if="tweet.comments.length"> {{tweet.comments.length}} </span>
         </div>
-        <span class="small" v-if="tweet.comments.length"> {{tweet.comments.length}} </span>
-      </div>
+    </div>
+    <div class="backDrop" v-if="responseINS" @click.self="$emit('responseE'); responseINS = !responseINS" >
+        <ResponseTweet :tweet="tweet" :user="user"/>
     </div>
   </div>
 </template>
 
 <script>
 import { usegetUser }  from '@/composables/useUserMethods'
-import { ref, computed } from 'vue';
-import { useLikeTweet } from '@/composables/useTweetMethods';
+import { ref, computed, onUnmounted } from 'vue';
+import { useLikeTweet, useDeleteTweet } from '@/composables/useTweetMethods';
+import ResponseTweet from './ResponseTweet.vue';
 
 export default {
-    props: ['tweet', 'user'],
+    props: ['tweet', 'user', 'backDrop'],
+    components: { ResponseTweet },
     data(props) {
-      const { error, getUser } = usegetUser();
+      const { errorFourU, getUser } = usegetUser();
+      const { errorEight, deleteTweet } = useDeleteTweet();
       const { likeTweet } = useLikeTweet();
       const tweetUser = ref(null);
-      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
+      const options = ref(false);
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+      const responseINS = ref(false)
 
       getUser(props.tweet.user).then(data => {
           tweetUser.value = data;
@@ -65,16 +87,31 @@ export default {
         if (!props.tweet.likes.includes(props.user.userID)) {
           props.tweet.likes.push(props.user.userID)
           const res = await likeTweet(props.tweet, props.user.accessToken)
-          if (!error.value) console.log(res);
+          if (!errorFourU.value) console.log(res);
         } else {
           const index = props.tweet.likes.findIndex(user => user === props.user.userID)
           props.tweet.likes.splice(index, 1)
           const res = await likeTweet(props.tweet, props.user.accessToken)
-          if (!error.value) console.log(res);
+          if (!errorFourU.value) console.log(res);
         }
       }
 
-      return { tweetUser, error, computedDate, handleLike }
+      const atclick = (e) => {
+          if (options.value && !e.target.id.includes(props.tweet._id)) {
+              const res = document.querySelector('.optionsT');
+              if (!res.contains(e.target)) {
+                options.value = !options.value;
+              }
+          }
+      }
+
+      document.body.addEventListener('click', atclick)
+
+      onUnmounted(() => {
+        document.body.removeEventListener('click', atclick)
+      })
+
+      return { tweetUser, errorFourU, computedDate, handleLike, options, responseINS, deleteTweet, errorEight }
     }
 }
 </script>
@@ -85,15 +122,6 @@ export default {
         padding: 20px;
         border-top: 1px solid lightgray;
         border-bottom: 1px solid lightgray;
-        span {
-          font-weight: bold;
-          cursor: pointer;
-        }
-        .small {
-          font-size: 11px;
-          font-weight: normal;
-          cursor: text;
-        }
         div {
           display: flex;
           justify-content: space-between;
@@ -101,41 +129,37 @@ export default {
         .icons {
           display: flex;
           justify-content: space-evenly;
-          img {
-            height: 1.2em;
-          }
           > div {
             width: 40px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             cursor: pointer;
+            div {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
           }
           .like {
-            border-radius: 50%;
-            padding: 3px;
-            img:hover {
-              filter: invert(13%) sepia(90%) saturate(6773%) hue-rotate(1deg) brightness(94%) contrast(117%);
-            }
-            .liked {
-              filter: invert(13%) sepia(90%) saturate(6773%) hue-rotate(1deg) brightness(94%) contrast(117%);
+            .material-symbols-outlined:hover {
+              transition: all 0.3s ease;
+              color: red;
+              background: rgba(239, 93, 142,0.5);
             }
             .small.liked {
               color: red;
             }
           }
-          .like:hover {
-              background: rgba(239, 93, 142,0.5);
-          }
-          .comment {
-            border-radius: 50%;
-            padding: 3px;
-            img:hover {
-              filter: invert(43%) sepia(99%) saturate(1262%) hue-rotate(179deg) brightness(98%) contrast(92%);
+          .liked {
+            color: red;
+           }
+          .comments {
+            .material-symbols-outlined:hover {
+              transition: all 0.3s ease;
+              color: rgb(29,155,240);
+              background: rgba(29,155,255, 0.1);
             }
-          }
-          .comment:hover {
-            background: rgba(29,155,255, 0.1);
           }
         }
     }

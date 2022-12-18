@@ -1,12 +1,20 @@
 import { ref } from "vue"
 import axios from "../api/axios";
 
-const error = ref(null)
+const errorOneU = ref(null); 
+const errorTwoU = ref(null); 
+const errorThreeU = ref(null);
+const errorFourU = ref(null);
+const errorFiveU = ref(null);
+const errorSixU = ref(null);
+const errorSevenU = ref(null);
+const errorEightU = ref(null);
+
 
 // post request to add a user in the database
 
 const signup = async (user) => {
-    error.value = null;
+    errorOneU.value = null;
 
     try {
 
@@ -20,45 +28,41 @@ const signup = async (user) => {
 
     } catch(err) {
         console.log(err.message)
-        error.value = err.message;
+        errorOneU.value = err.message;
     }
 
 }
 
 const useSignup = () => {
-    return {error, signup}
+    return {errorOneU, signup}
 }
 
 // post request to validate user and log them in
 
 const login = async (user) => {
-    error.value = null;
+    errorTwoU.value = null;
 
     try {
 
         const res = await axios.post('/users/login', user, { withCredentials: true });
 
-        if (res.status != 200) {
-            new Error('there is an error')
-        }
-
         return res.data;
 
     } catch(err) {
         console.log(err.message)
-        error.value = err.message;
+        errorTwoU.value = err.message;
     }
 
 }
 
 const useLogin = () => {
-    return {error, login}
+    return {errorTwoU, login}
 }
 
 // sends get request to get accessToken and user information if pages is refreshed
 
 const refresh = async () => {
-    error.value = null;
+    errorThreeU.value = null;
 
     try {
 
@@ -68,19 +72,19 @@ const refresh = async () => {
 
     } catch(err) {
         console.log(err.message)
-        error.value = err.message;
+        errorThreeU.value = err.message;
     }
 
 }
 
 const useRefresh = () => {
-    return {error, refresh}
+    return {errorThreeU, refresh}
 }
 
 // send a get request get public user information 
 
 const getUser = async (id) => {
-    error.value = null;
+    errorFourU.value = null;
 
     try {
 
@@ -90,18 +94,18 @@ const getUser = async (id) => {
 
     } catch(err) {
         console.log(err.message)
-        error.value = err.message;
+        errorFourU.value = err.message;
     }
 
 }
 
 const usegetUser = () => {
-    return {error, getUser}
+    return {errorFourU, getUser}
 }
 
 
 const logout = async () => {
-    error.value = null;
+    errorFiveU.value = null;
 
     try {
 
@@ -112,14 +116,87 @@ const logout = async () => {
 
     } catch(err) {
         console.log(err.message)
-        error.value = err.message;
+        errorFiveU.value = err.message;
     }
 
 }
 
 const useLogout = () => {
-    return {error, logout}
+    return {errorFiveU, logout}
 }
 
 
-export { useSignup, useLogin, useRefresh, usegetUser, useLogout }
+const updateProfile = async (info) => {
+    
+    errorSixU.value = null
+
+    try {
+
+        await axios.put('/users/update', { id: info.userID, name: info.name, bio: info.bio } , {
+            headers: {
+                Authorization: 'Bearer ' + info.accessToken
+            }
+        })
+
+
+    } catch(err) {
+
+        errorSixU.value = err.message
+        console.log(err.message)
+
+    }
+}
+
+const useUpdateProfile = () =>{
+    return { errorSixU, updateProfile }
+}
+
+
+const updateFollow = async (info) => {
+
+    errorSevenU.value = null;
+
+    try {
+        
+        await axios.put('/users/follow', {
+            userFollowing: info.userFollowing,
+            userFollowed: info.userFollowed
+        }, {
+             headers: {
+                Authorization: 'Bearer ' + info.accessToken
+             }
+        })
+
+    } catch(err) {
+        
+        errorSevenU.value = err.message;
+        console.log(err.message);
+
+    }
+    
+}
+
+const useUpdateFollow = () =>{
+    return { errorSevenU, updateFollow }
+}
+
+
+const getUsers = async () => {
+    errorEightU.value = null;
+
+    try {
+        const res = await axios.get('/users')
+
+        return res.data
+    } catch(err) {
+        errorEightU.value = err.message;
+        console.log(err)
+    }
+}
+
+const usegetUsers = () => {
+    return {  errorEightU, getUsers }
+}
+
+
+export { useSignup, useLogin, useRefresh, usegetUser, useLogout, useUpdateProfile, useUpdateFollow, usegetUsers }

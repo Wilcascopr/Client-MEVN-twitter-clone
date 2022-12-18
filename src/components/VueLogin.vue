@@ -27,7 +27,7 @@ export default {
     const email = ref('');
     const password = ref('');
 
-    const { error, login } = useLogin();
+    const { errorTwoU, login } = useLogin();
 
       const emitToggle = () => {
          context.emit('toggle')
@@ -36,7 +36,7 @@ export default {
       const handleLogin = async () => {
         const response = await login({ email: email.value, password: password.value })
 
-        if (!error.value) console.log(response);
+        if (!errorTwoU.value) console.log(response);
         context.emit('login')
 
       }

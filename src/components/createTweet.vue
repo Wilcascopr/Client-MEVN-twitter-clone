@@ -4,7 +4,9 @@
             <textarea v-model="text" 
             placeholder="What's happening?"
             @keyup="Adjust"></textarea>
-            <button>Tweet</button>
+            <div>
+                <button>Tweet</button>
+            </div>
         </form>
     </div>
 </template>
@@ -16,13 +18,13 @@ import { useCrateTweet } from '@/composables/useTweetMethods';
   export default {
     props: ['accessToken'],
     setup(props, context) {
-        const { error, createTweet } = useCrateTweet();
+        const { errorTwo, createTweet } = useCrateTweet();
         const text = ref('');
         const tags = ref ([]);
 
         const handlenNewTweet = async() => {
             const tweet = await createTweet({text: text.value, tags: tags.value }, props.accessToken)
-            if (!error.value) {
+            if (!errorTwo.value) {
                 text.value = ''
                 context.emit('addTweet', tweet)
             }
@@ -49,11 +51,13 @@ import { useCrateTweet } from '@/composables/useTweetMethods';
             margin: 10px 0;
             box-sizing: border-box;
         }
-        button {
-            padding: 1px 15px;
-            height: 2em;
-            position: relative;
-            left: 80%;
+        div {
+            display: flex;
+            justify-content: flex-end;
+            button {
+                padding: 1px 15px;
+                height: 2em;
+            }
         }
     }
 </style>

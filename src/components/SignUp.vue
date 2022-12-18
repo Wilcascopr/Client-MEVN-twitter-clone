@@ -15,6 +15,8 @@
                 <label>Password</label>
                 <input type="password" v-model="password">
             </div>
+            <div v-if="success.length" class="success">{{success}} <span @click="emitToggle">Log in</span></div>
+            <div v-if="errorOneU" class="error">There was an error, please check all your information and try again</div>
             <button>Create account</button>
         </form>
         <div>Have an account already? <span @click="emitToggle">Log in</span></div>
@@ -30,28 +32,33 @@ export default {
         const name = ref('');
         const email = ref('');
         const password = ref('');
+        const success = ref('');
 
-        const { error, signup} = useSignup();
+
+        const { errorOneU, signup } = useSignup();
 
         const emitToggle = () => {
             context.emit('toggle');
         }
 
         const handleSignup = async () => {
-            const message = await signup({
+            await signup({
                 name: name.value, email: email.value, password: password.value
             })
-            if (!error.value) console.log(message);
+            if(!errorOneU.value) {
+                success.value = 'Welcome to twitter, now you can ';
+            }
+
         }
 
-        return { emitToggle, handleSignup, name, email, password }
+        return { emitToggle, handleSignup, name, email, password, success, errorOneU }
     }
 }
 </script>
 
 <style lang="scss">
     .Sign {
-        width: 30%;
+        width: 35%;
         padding: 20px 50px;
         border-radius: 7px;
         box-shadow: -1px 1px 4px gray;
@@ -64,23 +71,6 @@ export default {
         }
         form {
             width: 100%;
-            .field {
-                label {
-                    display: block;
-                    font-size: 10px;
-                }
-                margin: 10px 0;
-                border: 1px solid lightgray;
-                border-radius: 3px;
-                padding: 5px;
-                input {
-                    height: 20px;
-                }
-            }
-            .field:focus-within {
-                border: 2px solid rgb(29,155,240);
-                color: rgb(29,155,240);
-            }
             button {
                 width: 100%;
                 border: none;
@@ -99,10 +89,16 @@ export default {
             }
         }
     }
+    @media screen and (max-width: 900px) {
+       .Sign {
+            width: 50%;
+       } 
+    }
     @media screen and (max-width: 500px) {
        .Sign {
             width: 100%;
             box-shadow: none;
        } 
     }
+    
 </style>

@@ -1,16 +1,19 @@
 <template>
-  <div class="homepage">
-    <div class="left-side" v-if="user">
-        <img src="../assets/logo.png">
-        <userCloud :user="user"/>
+    <div>
+        <div class="homepage" v-if="user" >
+            <div class="left-side" >
+                <img src="../assets/logo.png">
+                <userCloud :user="user"/>
+            </div>
+            <div class="tweets">
+                <TweetsColumn :user="user"/>
+            </div>
+            <div class="right-side">
+                <TrendingTags />
+            </div>
+        </div>
+        <div v-if="!user" class="loading" ></div>
     </div>
-    <div class="tweets" v-if="user">
-        <TweetsColumn :user="user"/>
-    </div>
-    <div class="right-side">
-        <TrendingTags />
-    </div>
-  </div>
 </template>
 
 <script>
@@ -22,17 +25,19 @@ import { ref } from 'vue';
 
 export default {
     setup() {
-        const { error, refresh } = useRefresh();
+        const { errorThreeU, refresh } = useRefresh();
         const user = ref(null);
 
-        refresh()
+        setTimeout(() => {
+            refresh()
             .then(data => {
                 user.value = data;
             })
-            .catch(err => console.log(err));
+            .catch(err => console.log(err)); 
+        }, 700);
 
 
-        return { error, user };
+        return { errorThreeU, user };
     },
     components: { TweetsColumn, userCloud, TrendingTags }
 }
@@ -61,20 +66,14 @@ export default {
     height: 100%;
 }
 .tweets {
+
     width: 44%;
-    margin: 0;
+    margin: 0 3%;
     border-left: 1px solid lightgray;
     border-right: 1px solid lightgray;
 }
 .homepage {
     display: flex;
     margin: 0 3%;
-}
-
-@media screen and (max-width: 500px) {
-    .left-side, .right-side {
-        visibility: hidden;
-        position: fixed;
-    }
 }
 </style>

@@ -1,22 +1,23 @@
 <template>
     <div class="left-bar">
-        <div>
-            <img src="../assets/home.png" >
-            <span>Home</span>
-        </div>
-        <div>
-            <img src="../assets/person.png" >
-            <span>Profile</span>
-        </div>
-        <div>
-            <img src="../assets/tag.png" >
-            <span>Explore</span>
-        </div>
-        <nav @click="toggleLogout" class="empty">
-            <div>
-                <span v-if="user" > {{user.name}} </span>
-                <div v-if="user" > {{user.email}} </div>
+        <router-link :to="{ name: 'homepage' }">
+            <div class="options">
+                <img src="../assets/home.png" >
+                <span>Home</span>
             </div>
+        </router-link>
+        <router-link :to="{ name: 'profile' , params: { id: user.userID }}">
+            <div class="options">
+                <img src="../assets/person.png" >
+                <span>Profile</span>
+            </div>
+        </router-link>
+        <nav @click="(toggle = !toggle)" class="empty">
+            <div>
+                <span v-if="user"> {{user.name}} </span>
+                <div v-if="user"> {{user.email}} </div>
+            </div>
+            <img src="../assets/person.png" class="bp">
             <img src="../assets/more_horiz.png" >
         </nav>
         <transition name="fade">
@@ -28,7 +29,7 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { onUnmounted, ref } from 'vue';
 import { useLogout } from '@/composables/useUserMethods'
 import { useRouter } from 'vue-router';
 
@@ -38,25 +39,30 @@ export default {
         const toggle = ref(false);
         const router = useRouter();
         
-        const { error, logout } = useLogout(); 
+        const { errorFiveU, logout } = useLogout(); 
 
-        document.body.addEventListener('click', (e) => {
-                const options = document.querySelector('.empty');
-                if (!e.target.classList.contains('logout') && !options.contains(e.target) && toggle.value === true) {
+
+        const atclick = (e) => {
+            const options = document.querySelector('.empty');
+            if (!options.contains(e.target) && toggle.value) {
+                if (!e.target.classList.contains('logout')) {
                     toggle.value = !toggle.value
                 }
-            })
+            }
+        }
 
-        const toggleLogout = () => {
-            toggle.value = !toggle.value
-        }   
+        document.body.addEventListener('click', atclick)
+
+        onUnmounted(() => {
+            document.body.removeEventListener('click', atclick)
+        })
 
         const handleLogout = async () => {
             await logout()
-            if (!error.value) router.push({ name: 'landing'});
+            if (!errorFiveU.value) router.push({ name: 'landing'});
         }
 
-        return { toggle, toggleLogout, handleLogout }
+        return { toggle, handleLogout }
     }
     
 }
@@ -80,9 +86,9 @@ export default {
         } 
     }
     nav:hover {
-        background: lightgray;
+        background: #eee;
     }
-    > div {
+    .options {
         cursor: pointer;
         display: flex;
         align-items: center;
@@ -96,18 +102,26 @@ export default {
             margin-right: 10px;
         }
     }
-    > div:hover {
-        background: lightgray;
+    .options:hover {
+        background: #eee;
+    }
+    .empty {
+        background: #eee;
+        .bp {
+            display: none;
+        }
     }
     .logout {
-        border: 0.5px solid lightgray;
+        border: 0.5px solid #eee;
+        padding: 5px 0;
         box-shadow: -1px 1px 4px gray;
         width: 200px;
         text-align: center;
+        border-radius: 20px;;
         span {
             font-size: 11px;
             width: 100%;
-            border-bottom: 1px solid lightgray;
+            border-bottom: 1px solid #eee;
         }
     }
     .logout:hover {
