@@ -1,6 +1,9 @@
 <template>
     <div>
         <form @submit.prevent="handlenNewTweet">
+            <div>
+                <div class="small" :class="{ error: text.length > 150 }">{{text.length}}/150</div>
+            </div>
             <textarea v-model="text" 
             placeholder="What's happening?"
             @keyup="Adjust"></textarea>
@@ -23,10 +26,12 @@ import { useCrateTweet } from '@/composables/useTweetMethods';
         const tags = ref ([]);
 
         const handlenNewTweet = async() => {
-            const tweet = await createTweet({text: text.value, tags: tags.value }, props.accessToken)
-            if (!errorTwo.value) {
-                text.value = ''
-                context.emit('addTweet', tweet)
+            if (text.value.length <= 150) {
+                const tweet = await createTweet({text: text.value, tags: tags.value }, props.accessToken)
+                if (!errorTwo.value) {
+                    text.value = ''
+                    context.emit('addTweet', tweet)
+                }
             }
         }
 

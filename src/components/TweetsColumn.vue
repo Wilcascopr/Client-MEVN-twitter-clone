@@ -34,7 +34,7 @@ export default {
     components: { createTweet, SingleTweet,ScrollHeader },
     setup() {
         const tweets = ref([]);
-        const page = 0;
+        let page = 0;
         const backDrop = ref(false)
 
         const { errorOne, getTweets } = usegetTweets(0);
@@ -47,7 +47,12 @@ export default {
 
         const loadmorePosts = () => {
             const { scrollHeight, scrollTop, clientHeight } = document.documentElement;
-            if ( (scrollTop + clientHeight) > (scrollHeight - 5)) console.log(scrollTop, clientHeight, scrollHeight); 
+            if ( (scrollTop + clientHeight) > (scrollHeight - 5)) {
+                page += 20;
+                getTweets(page)
+                    .then(data => tweets.value = [...tweets.value, ...data])
+                    .catch(error => console.log(error))
+            }
         }
         
         onMounted(() => {

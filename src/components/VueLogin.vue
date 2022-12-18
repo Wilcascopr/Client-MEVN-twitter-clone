@@ -11,6 +11,7 @@
                <label>Password</label>
                <input type="password" v-model="password">
            </div>
+           <div class="error" v-if="errorTwoU">{{ errMsg }}</div>
            <button>Log in</button>
        </form>
        <div>Don't have an accoount? <span @click="emitToggle">Sign Up</span></div>
@@ -26,6 +27,7 @@ export default {
   setup(props, context) {
     const email = ref('');
     const password = ref('');
+    const errMsg = ref('');
 
     const { errorTwoU, login } = useLogin();
 
@@ -34,14 +36,17 @@ export default {
       }
 
       const handleLogin = async () => {
-        const response = await login({ email: email.value, password: password.value })
+        await login({ email: email.value, password: password.value })
 
-        if (!errorTwoU.value) console.log(response);
-        context.emit('login')
+        if (!errorTwoU.value) {
+          context.emit('login')
+        } else {
+          errMsg.value = 'Invalid credentials, please check your email or password'
+        }
 
       }
 
-      return { emitToggle, login, email, password, handleLogin }
+      return { emitToggle, login, email, password, handleLogin, errorTwoU, errMsg }
   }
 }
 </script>

@@ -12,6 +12,9 @@
         class="repl">Replying to <span>{{ tweetUser.email }}</span></div>
         <div v-if="user"><span>{{user.name}}</span></div>
         <form @submit.prevent="handleReplyTweet">
+            <div class="left">
+                <div class="small" :class="{ error: text.length > 150 }">{{text.length}}/150</div>
+            </div>
             <textarea v-model="text" 
             placeholder="Tweet your reply"
             @keyup="Adjust"
@@ -68,6 +71,7 @@ export default {
 
 
         const handleReplyTweet = async () => {
+          if (text.value.length <= 150) {
             await replyTweet({
               tweetID: props.tweet._id,
               text: text.value,
@@ -76,8 +80,12 @@ export default {
             })
             if (!errorFive.value) {
                 text.value = '';
+                if(router.currentRoute.value.fullPath.includes(props.tweet._id)) {
+                    window.location.reload()
+                }
                 router.push({ name: 'tweet', params: { id: props.tweet._id } })
             }
+          }
         }
 
         return { Adjust, computedDate, text, tags, errorFourU, tweetUser, errorFive, handleReplyTweet }
@@ -93,9 +101,13 @@ export default {
         padding: 20px;
         background: white;
         width: 400px;
-        height: 300px;
+        min-height: 300px;
         border-radius: 20px;
         form {
+          .left {
+            display: flex;
+            justify-content: flex-end;
+          }
           textarea {
             margin: 10px 0;
           }

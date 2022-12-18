@@ -1,7 +1,7 @@
 <template>
 <div class="brNormal">
   <nav class="head">
-        <img src="../assets/person.png" @click="$emit('cellBar'); cellBar = !cellBar">
+        <span class="material-symbols-outlined" @click="$emit('cellBar'); cellBar = !cellBar">face</span>
         <h3><span>{{message}}</span></h3>
         <span class="material-symbols-outlined">auto_awesome</span>
   </nav>
@@ -14,21 +14,25 @@
               <div>{{user.email}}</div>
           </div>
           <router-link :to="{ name: 'homepage' }" >
-            <div class="options">
+            <div class="optionsCB">
+                <span class="material-symbols-outlined">home</span>
                 Home
             </div>
           </router-link>
           <router-link :to="{ name: 'profile', params: { id: user.userID} }" >
-            <div class="options">
+            <div class="optionsCB">
+                <span class="material-symbols-outlined">person</span>
                 Profile
             </div>
           </router-link>
           <router-link :to="{ name: 'searchPhone' }" >
-            <div class="options">
+            <div class="optionsCB">
+                <span class="material-symbols-outlined">manage_search</span>
                 Search User
             </div>
           </router-link>
-            <div class="options" @click="handleLogout">
+            <div class="optionsCB" @click="handleLogout">
+                <span class="material-symbols-outlined">logout</span>
                 Log out
             </div>
       </div>
@@ -74,12 +78,12 @@ import { useLogout } from '@/composables/useUserMethods';
             height: 40px;
             background: white;
             opacity: 80%;
-            img {
+            .material-symbols-outlined {
                 display: none;
                 border-radius: 50%;
                 padding: 2px;
             }
-            img:hover {
+            .material-symbols-outlined:hover {
               background: #eee;
               cursor: pointer;
             }
@@ -92,10 +96,14 @@ import { useLogout } from '@/composables/useUserMethods';
           width: 80%;
           min-height: 100vh;
           padding: 5px;
-          .options {
+          .optionsCB {
+            display: flex;
+            align-items: center;
+            font-size: 18px;
+            font-weight: 500;
             margin: 5px;
           }
-          .options:hover {
+          .optionsCB:hover {
             background: #eee;
           }
           .user-info {

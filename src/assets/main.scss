@@ -206,6 +206,8 @@ a:visited {
         width: 69%;
     }
 }
+
+
 @media screen and (max-width: 500px) {
     #responseTW {
         display: block;
@@ -244,15 +246,22 @@ a:visited {
         width: 100%;
         margin: 0;
         .head {
-            img {
+            .material-symbols-outlined {
                 display: block;
-                height: 30px;
-                width: 30px;
             }
         }
-        #brCell {
-            display: block;
-        }
         
+    }
+    #brCell {
+        display: block;
+        .head {
+            .material-symbols-outlined {
+                display: block;
+            }
+        }
+        img {
+            display: block;
+            height: 2.2em;
+        }
     }
 }

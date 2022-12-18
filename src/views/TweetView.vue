@@ -21,13 +21,13 @@
             :backDrop="backDrop" @responseE="backDrop = !backDrop"
             @delete="$router.push({ name: 'homepage' })"/>
             <transition-group tag="ul" name="list" v-if="Rtweets.length">
-                <li v-for="tweet in Rtweets" 
+                <li v-for="(tweet, idx) in Rtweets" 
                 :key="tweet._id"
                 class="tweetscontainer">
                     <SingleTweet 
                     :tweet="tweet" :user="user"
                     :backDrop="backDrop" @responseE="backDrop = !backDrop"
-                    @delete="Rtweets = Rtweets.filter(twt => twt._id !== tweet._id)"/>
+                    @delete="deleteR(idx)"/>
                 </li>
             </transition-group>
         </div>
@@ -74,7 +74,12 @@ export default {
             }
         }, 1000); 
 
-        return { tweet, user, Rtweets, backDrop}
+        const deleteR = (idx) => {
+            Rtweets.value = Rtweets.value.filter(twt => twt._id !== Rtweets.value[idx]._id);
+            window.location.reload();
+        }
+
+        return { tweet, user, Rtweets, backDrop, deleteR}
     }
 }
 </script>
