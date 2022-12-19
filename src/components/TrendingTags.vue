@@ -1,6 +1,6 @@
 <template>
     <div class="right-bar">
-        <form >
+        <form @submit.prevent>
             <div>
                 <img src="../assets/search.svg">
                 <input type="text" placeholder="Search Twitter" v-model="criteria" @keyup="search">
