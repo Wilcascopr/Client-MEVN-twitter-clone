@@ -124,7 +124,7 @@ const useGetUserTweets = () => {
 }
 
 const replyTweet = async (info) => {
-    console.log(info.accessToken);
+    
     errorFive.value = null;
 
     try {
