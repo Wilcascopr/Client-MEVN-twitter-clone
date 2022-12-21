@@ -58,16 +58,17 @@ export default {
 
 <style lang="scss">
     .Sign {
-        width: 35%;
+        width: 31%;
         padding: 20px 50px;
         border-radius: 7px;
         box-shadow: -1px 1px 4px gray;
         display: flex;
         flex-direction: column;
         align-items: center;
+        min-height: 500px;
         img {
-            height: 45px;
-            width: 45px;
+            height: 55px;
+            width: 55px;
         }
         form {
             width: 100%;
@@ -76,12 +77,12 @@ export default {
                 border: none;
                 height: 3em;
                 margin-top: 50px;
-                font-size: 14px;
+                font-size: 16px;
             }
         }
         div {
             margin-top: 10px;
-            font-size: 12px;
+            font-size: 14px;
             span {
                 cursor: pointer;
                 font-weight: bold;

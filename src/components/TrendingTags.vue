@@ -7,7 +7,7 @@
             </div>
         </form>
         <div class="follow" v-if="usersResults.length && criteria.length">
-            <h4>Results</h4>
+            <h3>Results</h3>
             <div v-for="(user, idx) in usersResults" :key="user._id" class="popular-user">
                 <router-link :to="{ name: 'profile', params: { id: user._id }}" v-if="idx < 3">
                     <div style="font-weight: bold">{{user.name}}</div>
@@ -55,6 +55,7 @@ getUsers()
 <style scoped lang="scss">
     .right-bar {
         .follow {
+            font-size: 20px;
             display: flex;
             overflow: hidden;
             flex-direction: column;

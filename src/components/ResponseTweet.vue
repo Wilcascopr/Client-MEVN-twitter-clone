@@ -100,8 +100,9 @@ export default {
         margin: 100px auto;
         padding: 20px;
         background: white;
-        width: 400px;
+        height: fit-content;
         min-height: 300px;
+        width: 400px;
         border-radius: 20px;
         form {
           .left {

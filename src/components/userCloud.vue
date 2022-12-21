@@ -77,8 +77,8 @@ export default {
         margin: 10px;
         border-radius: 25px;
         padding: 10px;
-        width: fit-content;
-        font-size: 14px;
+        width:max-content;
+        font-size: 20px;
         img {
             width: 2em;
             height: 2em;
@@ -92,6 +92,7 @@ export default {
         cursor: pointer;
         display: flex;
         align-items: center;
+        font-size: 20px;
         margin: 10px;
         border-radius: 25px;
         width: fit-content;
@@ -119,7 +120,7 @@ export default {
         text-align: center;
         border-radius: 20px;;
         span {
-            font-size: 11px;
+            font-size: 12px;
             width: 100%;
             border-bottom: 1px solid #eee;
         }

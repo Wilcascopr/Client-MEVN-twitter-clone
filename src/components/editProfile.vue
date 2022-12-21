@@ -14,7 +14,7 @@
             </div> 
             <div class="field">
                 <label>Bio</label>
-                <textarea v-model="bio"></textarea>
+                <textarea v-model="bio" @keyup="Adjust"></textarea>
             </div>
         </form>
     </div>
@@ -47,7 +47,12 @@ export default {
             if (!errorSixU.value) window.location.reload();
         }
 
-        return { name, bio, handleUpdate }
+        const Adjust = (e) => {
+            e.target.style.height = '2px'
+            e.target.style.height = `${e.target.scrollHeight}px`
+        }
+
+        return { name, bio, handleUpdate, Adjust }
     }
 }
 </script>
@@ -58,8 +63,8 @@ export default {
         padding: 20px;
         box-shadow: 1px -1px 4px gray;
         background: white;
-        width: 400px;
-        height: 300px;
+        width: 500px;
+        min-height: 320px;
         border-radius: 20px;
         form {
             button {

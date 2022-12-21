@@ -66,7 +66,7 @@ export default {
     height: 100%;
 }
 .tweets {
-
+    font-size: 20px;
     width: 44%;
     margin: 0 3%;
     border-left: 1px solid lightgray;

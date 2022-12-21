@@ -118,7 +118,7 @@ export default {
 
 <style lang="scss">
     .tweet {
-        font-size: 12px;
+        font-size: 14px;
         padding: 20px;
         border-top: 1px solid lightgray;
         border-bottom: 1px solid lightgray;

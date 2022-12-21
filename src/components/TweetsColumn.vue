@@ -91,7 +91,7 @@ export default {
             width: 100%;
             padding: 10px 0;
             > span {
-                font-size: 12px;
+                font-size: 16px;
                 margin-left: 20px;
             }
         }
