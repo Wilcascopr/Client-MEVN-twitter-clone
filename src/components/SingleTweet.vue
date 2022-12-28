@@ -153,6 +153,7 @@ export default {
           }
           .liked {
             color: red;
+            font-weight: bolder;
            }
           .comments {
             .material-symbols-outlined:hover {
