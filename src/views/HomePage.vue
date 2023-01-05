@@ -22,16 +22,19 @@ import TweetsColumn from '@/components/TweetsColumn.vue';
 import userCloud from '@/components/userCloud.vue';
 import TrendingTags from '@/components/TrendingTags.vue';
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 export default {
     setup() {
         const { errorThreeU, refresh } = useRefresh();
         const user = ref(null);
+        const router = useRouter();
 
         setTimeout(() => {
             refresh()
             .then(data => {
                 user.value = data;
+                if (!user.value) router.push({ name: 'landing' })
             })
             .catch(err => console.log(err)); 
         }, 700);

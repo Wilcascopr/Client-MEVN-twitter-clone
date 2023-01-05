@@ -21,13 +21,13 @@
             :backDrop="backDrop" @responseE="backDrop = !backDrop"
             @delete="$router.push({ name: 'homepage' })"/>
             <transition-group tag="ul" name="list" v-if="Rtweets.length">
-                <li v-for="(tweet, idx) in Rtweets" 
+                <li v-for="tweet in Rtweets" 
                 :key="tweet._id"
                 class="tweetscontainer">
                     <SingleTweet 
                     :tweet="tweet" :user="user"
                     :backDrop="backDrop" @responseE="backDrop = !backDrop"
-                    @delete="deleteR(idx)"/>
+                    @delete="deleteR()"/>
                 </li>
             </transition-group>
         </div>
@@ -47,6 +47,7 @@ import TrendingTags from '@/components/TrendingTags.vue';
 import { usegetTweet,  userGetReplyTweets } from '@/composables/useTweetMethods';
 import { useRefresh } from '@/composables/useUserMethods';
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import ScrollHeader from '@/components/ScrollHeader.vue';
  
 
@@ -58,6 +59,7 @@ export default {
         const Rtweets = ref([]);
         const user = ref(null);
         const backDrop = ref(false);
+        const router = useRouter();
 
         const { errorSix, getTweet } = usegetTweet();
         const { errorSeven, getReplyTweets } = userGetReplyTweets();
@@ -65,7 +67,8 @@ export default {
 
         setTimeout(async () => {
             const resU = await refresh();
-            if (!errorThreeU.value) user.value = resU;
+            if (!errorThreeU.value) { user.value = resU }
+            if (!user.value) { router.push({ name: 'landing' }) }
             const res = await getTweet(props.id)
             if (!errorSix.value) {
                 tweet.value = res;
@@ -74,9 +77,12 @@ export default {
             }
         }, 1000); 
 
-        const deleteR = (idx) => {
-            Rtweets.value = Rtweets.value.filter(twt => twt._id !== Rtweets.value[idx]._id);
-            window.location.reload();
+        const deleteR = () => {
+            setTimeout(async () => {
+                const resRT = await getReplyTweets(tweet.value.comments);
+                if (!errorSeven.value) Rtweets.value = resRT;
+                console.log(Rtweets.value);
+            }, 500);
         }
 
         return { tweet, user, Rtweets, backDrop, deleteR}

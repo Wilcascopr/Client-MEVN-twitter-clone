@@ -40,6 +40,7 @@ import userCloud from '@/components/userCloud.vue';
 import TrendingTags from '@/components/TrendingTags.vue';
 import SingleTweet from '@/components/SingleTweet.vue';
 import ScrollHeader from '@/components/ScrollHeader.vue';
+import { useRouter } from 'vue-router';
 
 export default {
     props: ['id'],
@@ -49,6 +50,7 @@ export default {
         const user = ref(null);
         const loggedUser = ref(null);
         const backDrop = ref(false);
+        const router = useRouter();
 
         const { errorFourU, getUser } = usegetUser();
         const { errorThreeU, refresh } = useRefresh();
@@ -62,7 +64,10 @@ export default {
                 .catch(err => console.log(err))
 
             refresh()
-                .then(data => loggedUser.value = data)
+                .then(data => {
+                    loggedUser.value = data;
+                    if (!loggedUser.value) router.push({ name: 'landing' });
+                })
                 .catch(err => console.log(err))
 
             getUser(props.id)

@@ -13,8 +13,8 @@
       <div v-if="options" class="optionsT">
             <div id="delete"
             @click="async () => {
-              await deleteTweet(tweet._id, user.accessToken)
-              if (!errorEight) $emit('delete')
+              await deleteTweet(tweet._id, user.accessToken);
+              if (!errorEight) $emit('delete');
             }"><span class="material-symbols-outlined">delete</span> Delete </div>
       </div>
     </div>

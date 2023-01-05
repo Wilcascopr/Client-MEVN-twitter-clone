@@ -13,6 +13,7 @@
 /* eslint-disable */
 import VueLogin from '@/components/VueLogin.vue';
 import SignUp from '@/components/SignUp.vue';
+import { useRefresh } from '@/composables/useUserMethods';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -24,6 +25,12 @@ export default {
   setup() {
     const signup = ref(true);
     const router = useRouter();
+
+    const { errorThreeU, refresh } = useRefresh();
+
+    refresh()
+      .then(res => {if (!errorThreeU.value) router.push({ name: 'homepage' })})
+      .catch()
 
     return { signup, router }
   }
