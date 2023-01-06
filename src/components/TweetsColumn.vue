@@ -57,10 +57,13 @@ export default {
         
         onMounted(() => {
             window.addEventListener('scroll', loadmorePosts);
+            window.addEventListener('touchmove', loadmorePosts);
         })
 
         onUnmounted(() => {
             window.removeEventListener('scroll', loadmorePosts);
+            window.removeEventListener('touchmove', loadmorePosts);
+
         })
 
         const addTweet = (tweet) => {
