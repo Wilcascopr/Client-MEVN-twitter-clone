@@ -83,7 +83,7 @@ export default {
                 tweet.value = res;
                 const resRT = await getReplyTweets(tweet.value.comments);
                 if (!errorSeven.value) Rtweets.value = resRT;
-            }, 500);
+            }, 300);
         }
 
         return { tweet, user, Rtweets, backDrop, deleteR}
