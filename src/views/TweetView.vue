@@ -79,9 +79,10 @@ export default {
 
         const deleteR = () => {
             setTimeout(async () => {
+                const res = await getTweet(props.id)
+                tweet.value = res;
                 const resRT = await getReplyTweets(tweet.value.comments);
                 if (!errorSeven.value) Rtweets.value = resRT;
-                console.log(Rtweets.value);
             }, 500);
         }
 
